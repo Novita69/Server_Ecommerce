@@ -1,14 +1,23 @@
 
 const {
     createUser,
-    deleteUser
+    deleteUser,
+    createProduct,
+    updateProduct,
+    getListProduct,
+    deleteProduct
 
 } = require('./user.controller');
+
 const router = require('express').Router();
 
 
-router.post('/', createUser);
-router.delete('/', deleteUser);
+router.post('/createUser', createUser);
+router.delete('/deleteUser', deleteUser);
+router.post('/addProduct', createProduct);
+router.put('/updateProduct', updateProduct);
+router.get('/showListProduct', getListProduct);
+router.delete('/deleteProduct', deleteProduct);
 
 
 module.exports = router;
