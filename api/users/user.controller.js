@@ -4,6 +4,8 @@ const {
     updateProduct,
     add,
     getListProduct,
+    getListUser,
+    updateAccount,
     deleteProduct
 } = require('./user.service');
 
@@ -17,6 +19,41 @@ module.exports = {
                 message: 'Data Berhasil disimpan'
             });
         });
+    },
+    getListUser: (req, res) => {
+        getListUser((err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            return res.json({
+                success: 1,
+                data: results
+
+            });
+
+        });
+    },
+    updateAccount: (req, res) => {
+        const body = req.body;
+        updateAccount(body, (err, results) => {
+            if (err) {
+                console.log(err);
+                return false;
+            }
+
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    message: 'Failed to Update User'
+                });
+            };
+            return res.json({
+                success: 1,
+                message: 'update successfully'
+            });
+        });
+
     },
 
     deleteUser: (req, res) => {

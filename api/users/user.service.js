@@ -25,6 +25,43 @@ module.exports = {
         );
     },
 
+    //Show List User
+
+    getListUser: callBack => {
+        pool.query(
+            `select merchant_id, password, username, address, join_date, phone_number from merchantProfile`,
+            [],
+            (error, results, fields) => {
+                if (error) {
+                    return callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+
+    //Update Account
+
+    updateAccount: (data, callBack) => {
+        pool.query(
+            `update merchantProfile set password=?, username=?, address=?, join_date=?, phone_number=? where merchant_id=?`,
+            [
+                data.password,
+                data.username,
+                data.address,
+                data.join_date,
+                data.phone_number,
+                data.merchant_id
+            ],
+            (error, results, fields) => {
+                if (error) {
+                    callBack(error);
+                }
+                return callBack(null, results);
+            }
+        );
+    },
+
     //Remove Account Merchant
 
     deleteUser: (data, callBack) => {
