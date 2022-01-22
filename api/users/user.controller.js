@@ -6,13 +6,18 @@ const {
     getListProduct,
     getListUser,
     updateAccount,
+    getUserByUsername,
     deleteProduct
 } = require('./user.service');
+
+const { genSaltSync, hashSync, compareSync } = require('bcrypt');
+const { sign } = require('jsonwebtoken');
 
 module.exports = {
     createUser: (req, res) => {
         const body = req.body;
-        // body.password = body.password;
+        const salt = genSaltSync(10);
+        body.password = hashSync(body.password, salt);
         create(body, () => {
 
             return res.status(200).json({
@@ -69,14 +74,6 @@ module.exports = {
 
     createProduct: (req, res) => {
         const body = req.body;
-        // body.password = body.password;
-        // add(body, () => {
-
-        //     return res.status(200).json({
-        //         message: 'Data Berhasil disimpan'
-        //     });
-        // });
-
         add(body, (err, results) => {
             if (err) {
                 console.log(err);
@@ -138,8 +135,41 @@ module.exports = {
             });
         });
 
-    }
+    },
+    login: (req, res) => {
+        const body = req.body;
+        getUserByUsername(body.username, (err, results) => {
+            if (err) {
+                console.log(err);
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    data: 'Invalid username or password'
+                });
+            }
 
+            const result = compareSync(body.password, results.password);
+            if (result) {
+                results.password = undefined;
+                const jsontoken = sign({ result: results }, 'qwe1234', {
+                    expiresIn: '1h'
+
+                });
+
+                return res.json({
+                    success: 1,
+                    message: 'Login Successfully',
+                    token: jsontoken
+                });
+            } else {
+                return res.json({
+                    success: 0,
+                    data: 'Invalid Username or Password'
+                });
+            }
+        });
+    }
 
 
 };

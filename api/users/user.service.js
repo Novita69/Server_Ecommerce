@@ -142,10 +142,20 @@ module.exports = {
                 return callBack(null, results[0]);
             }
         );
+    },
+
+    getUserByUsername: (username, callBack) => {
+        pool.query(
+            `select * from merchantProfile where username = ?`,
+            [username],
+            (error, results, fields) => {
+                if (error) {
+                    callBack(error);
+                }
+                return callBack(null, results[0]);
+            }
+        );
     }
-
-
-
 
 
 
