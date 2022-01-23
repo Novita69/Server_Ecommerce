@@ -6,18 +6,36 @@ const {
     getListProduct,
     getListUser,
     updateAccount,
-    getUserByUsername,
     deleteProduct
 } = require('./user.service');
 
-const { genSaltSync, hashSync, compareSync } = require('bcrypt');
-const { sign } = require('jsonwebtoken');
+
+
+// const { genSaltSync, hashSync, compareSync } = require('base64');
+
+
+// const { base64encode, base64decode } = require('nodejs-base64');
+// var base64 = require('base-64');
+// var utf8 = require('utf8');
+
+
+// var bytes = utf8.base64encode(text);
+// var encoded = base64.encode(bytes);
+// const { sign } = require('jsonwebtoken');
+
+
+
+// console.log(encodedStringBtoA);
 
 module.exports = {
     createUser: (req, res) => {
         const body = req.body;
-        const salt = genSaltSync(10);
-        body.password = hashSync(body.password, salt);
+        // const salt = genSaltSync(10);
+        let decodedStringBtoA = body.password;
+
+        // Encode the String
+        let encodedStringBtoA = btoa(decodedStringBtoA);
+        body.password = encodedStringBtoA ;
         create(body, () => {
 
             return res.status(200).json({
@@ -135,41 +153,36 @@ module.exports = {
             });
         });
 
-    },
-    login: (req, res) => {
-        const body = req.body;
-        getUserByUsername(body.username, (err, results) => {
-            if (err) {
-                console.log(err);
-            }
-            if (!results) {
-                return res.json({
-                    success: 0,
-                    data: 'Invalid username or password'
-                });
-            }
-
-            const result = compareSync(body.password, results.password);
-            if (result) {
-                results.password = undefined;
-                const jsontoken = sign({ result: results }, 'qwe1234', {
-                    expiresIn: '1h'
-
-                });
-
-                return res.json({
-                    success: 1,
-                    message: 'Login Successfully',
-                    token: jsontoken
-                });
-            } else {
-                return res.json({
-                    success: 0,
-                    data: 'Invalid Username or Password'
-                });
-            }
-        });
     }
+    // login: (req, res) => {
+    //     const body = req.body;
+    //     function auth(req, res, next) {
+    //         console.log(req.headers);
+    //         var authHeader = req.headers.authorization;
+        
+    //         if (!authHeader) {
+    //             var err = new Error('You are not authenticated');
+    //             res.setHeader('WWW-Authenticated', 'Basic');
+    //             err.status = 401;
+    //             return next(err);
+        
+    //         }
+        
+    //         var auth = new Buffer(authHeader.split(' ')[1], 'base64').toString().split(':');
+    //         var username = auth[0];
+    //         var password = auth[1];
+        
+    //         if (username === 'admin' && password === 'password') {
+    //             next();
+    //         }
+    //         else {
+    //             var err = new Error('You are not authenticated');
+    //             res.setHeader('WWW-Authenticated', 'Basic');
+    //             err.status = 401;
+    //             return next(err);
+    //         }
+    //     }
+    // }
 
 
 };
