@@ -6,7 +6,8 @@ const {
     getListProduct,
     getListUser,
     updateAccount,
-    deleteProduct
+    deleteProduct,
+    login
 } = require('./user.service');
 
 
@@ -35,7 +36,7 @@ module.exports = {
 
         // Encode the String
         let encodedStringBtoA = btoa(decodedStringBtoA);
-        body.password = encodedStringBtoA ;
+        body.password = encodedStringBtoA;
         create(body, () => {
 
             return res.status(200).json({
@@ -153,36 +154,40 @@ module.exports = {
             });
         });
 
-    }
-    // login: (req, res) => {
-    //     const body = req.body;
-    //     function auth(req, res, next) {
-    //         console.log(req.headers);
-    //         var authHeader = req.headers.authorization;
-        
-    //         if (!authHeader) {
-    //             var err = new Error('You are not authenticated');
-    //             res.setHeader('WWW-Authenticated', 'Basic');
-    //             err.status = 401;
-    //             return next(err);
-        
-    //         }
-        
-    //         var auth = new Buffer(authHeader.split(' ')[1], 'base64').toString().split(':');
-    //         var username = auth[0];
-    //         var password = auth[1];
-        
-    //         if (username === 'admin' && password === 'password') {
-    //             next();
-    //         }
-    //         else {
-    //             var err = new Error('You are not authenticated');
-    //             res.setHeader('WWW-Authenticated', 'Basic');
-    //             err.status = 401;
-    //             return next(err);
-    //         }
-    //     }
-    // }
+    },
 
+        login: (req, res, next) => {
+            login((err, results) => {
+                const authHeader = req.headers.authorization;
+                const auth = new Buffer(authHeader.split(' ')[1], 'base64').toString().split(':');
+                const username = auth[0];
+                const password = auth[1];
 
-};
+                if (!authHeader) {
+                    const err = new Error('You are not authenticated');
+                    return res.json({
+                        success: 1,
+                        data: results
+                    });
+                } else {
+                    err.status = 401;
+                    return next(err);
+                }
+
+                if (username === 'username' && password === 'password') {
+                    next();
+                }
+                else {
+                    var err = new Error('You are not authenticated');
+                    return res.json({
+                        success: 1,
+                        data: results
+                    });
+                    err.status = 401;
+                    return next(err);
+                }
+
+            });
+        }
+
+    };

@@ -144,19 +144,30 @@ module.exports = {
         );
     },
 
-    getUserByUsername: (username, callBack) => {
+    // getUserByUsername: (username, callBack) => {
+    //     pool.query(
+    //         `select * from merchantProfile where username = ?`,
+    //         [username],
+    //         (error, results, fields) => {
+    //             if (error) {
+    //                 callBack(error);
+    //             }
+    //             return callBack(null, results[0]);
+    //         }
+    //     );
+    // },
+
+    login: (username, password, callBack) => {
         pool.query(
-            `select * from merchantProfile where username = ?`,
-            [username],
+            `select * from merchantProfile where username = ? and password = ?`,
+            [username, password],
             (error, results, fields) => {
-                if (error) {
+                if(error ){
                     callBack(error);
                 }
                 return callBack(null, results[0]);
             }
         );
     }
-
-
 
 };
