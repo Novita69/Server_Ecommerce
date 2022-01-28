@@ -39,6 +39,14 @@ module.exports = {
         body.password = encodedStringBtoA;
         create(body, () => {
 
+            if (err) {
+                console.log(err);
+                return res.status(500).json({
+                    success: 0,
+                    message: 'Database Connection Error'
+                });
+            }
+
             return res.status(200).json({
                 message: 'Data Berhasil disimpan'
             });
@@ -50,6 +58,7 @@ module.exports = {
                 console.log(err);
                 return;
             }
+            
             return res.json({
                 success: 1,
                 data: results
@@ -83,6 +92,17 @@ module.exports = {
     deleteUser: (req, res) => {
         const data = req.body;
         deleteUser(data, () => {
+
+            if (err) {
+                console.log(err);
+                return false;
+            }
+            if (!results) {
+                return res.json({
+                    success: 0,
+                    message: 'Record Not Found'
+                });
+            }
 
             return res.json({
                 message: 'User Deleted Successfully'
