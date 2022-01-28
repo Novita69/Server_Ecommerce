@@ -11,10 +11,12 @@ Berikut ini gambar ERD rancangan database nya :
 Daftar API :
 
 http://localhost:3000/api/users/createUser,
-http://localhost:3000/api/users/deleteUser,
-http://localhost:3000/api/users/deleteProduct,
-http://localhost:3000/api/users/login,
 http://localhost:3000/api/users/showListUser,
-http://localhost:3000/api/users/showListProduct,
 http://localhost:3000/api/users/updateAccount,
-http://localhost:3000/api/users/updateProduct
+http://localhost:3000/api/users/deleteUser,
+http://localhost:3000/api/users/createProduct,
+http://localhost:3000/api/users/showListProduct,
+http://localhost:3000/api/users/updateProduct,
+http://localhost:3000/api/users/deleteProduct,
+http://localhost:3000/api/users/login
+
